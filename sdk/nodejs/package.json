@@ -1,6 +1,6 @@
 {
     "name": "@nellisauction/pulumi-cockroach",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "description": "A Pulumi package for managing CockroachDB Cloud resources.",
     "keywords": [
         "pulumi",
@@ -27,7 +27,7 @@
     "pulumi": {
         "resource": true,
         "name": "cockroach",
-        "version": "0.1.0",
+        "version": "0.0.0",
         "server": "github://api.github.com/nellisauction/pulumi-cockroach"
     }
 }
