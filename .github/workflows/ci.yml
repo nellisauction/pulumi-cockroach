@@ -28,9 +28,22 @@ jobs:
       - name: Test Provider
         run: make test_provider PROVIDER_VERSION=0.0.0-ci
 
+  # Fan-in gate producing the org-required "allow-merge / allow-merge" status
+  # check. This mirrors nellisauction/.github/.github/workflows/allow-merge.yml
+  # inline because that repo is private and this repo is public, and GitHub
+  # does not allow public repos to call reusable workflows from private repos.
   allow-merge:
+    name: allow-merge / allow-merge
     if: always()
     needs: [validate]
-    uses: nellisauction/.github/.github/workflows/allow-merge.yml@main
-    with:
-      failed: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required jobs
+        env:
+          FAILED: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: |
+          if [[ "$FAILED" == "true" ]]; then
+            echo "One or more required checks failed or were cancelled."
+            exit 1
+          fi
+          echo "All required checks passed."
