@@ -53,7 +53,7 @@ func Provider() tfbridge.ProviderInfo {
 			"cockroach_sql_user": {
 				Fields: map[string]*tfbridge.SchemaInfo{
 					"password": {
-						DeprecationMessage: "The `password` attribute persists the clear text password in state. " +
+						DeprecationMessage: "The `password` attribute persists the clear text password in Terraform state. " +
 							"Migrate to `passwordWo` (with `passwordWoVersion` for rotations): Pulumi keeps `passwordWo` " +
 							"only as an encrypted secret input and never in resource outputs or Terraform state. " +
 							"`password` will be removed in a future major release of the provider.",
