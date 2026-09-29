@@ -69,7 +69,7 @@ export interface ClusterDedicated {
      */
     memoryGib: number;
     /**
-     * Number of virtual CPUs per node in the cluster.
+     * Number of virtual CPUs per node in the cluster. Mutually exclusive with per-region `regions[].num_virtual_cpus`/`machineType`.
      */
     numVirtualCpus: number;
     /**
@@ -92,6 +92,10 @@ export interface ClusterRegion {
      */
     internalDns: string;
     /**
+     * Machine type identifier per node in this region, e.g., m6.xlarge, n2-standard-4. Set this (or `numVirtualCpus`) on every region to create a heterogeneous Advanced cluster. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `numVirtualCpus` on the same region. This attribute requires a feature flag to be enabled; it is recommended to use `numVirtualCpus` instead. Valid for Advanced clusters only.
+     */
+    machineType: string;
+    /**
      * Name of the region. Should match the region code used by the cluster's cloud provider.
      */
     name: string;
@@ -99,6 +103,10 @@ export interface ClusterRegion {
      * Number of nodes in the region. Valid for Advanced clusters only.
      */
     nodeCount: number;
+    /**
+     * Number of virtual CPUs per node in this region. Set this (or `machineType`) on every region to create a heterogeneous Advanced cluster whose regions use different machine types. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `machineType` on the same region. Requires a feature flag to be enabled; valid for Advanced clusters only.
+     */
+    numVirtualCpus: number;
     /**
      * Set to true to mark this region as the primary for a serverless cluster. Exactly one region must be primary. Dedicated clusters expect to have no primary region.
      */
@@ -139,6 +147,10 @@ export interface ClusterServerless {
      */
     upgradeType: string;
     usageLimits?: outputs.ClusterServerlessUsageLimits;
+    /**
+     * Set to true to create the cluster with no default entries to the IP allowlist, blocking inbound connections until entries are added manually. This field is not used after cluster creation; to add new allowlist entries, configure your cluster as normal.
+     */
+    withEmptyIpAllowlist: boolean;
 }
 
 export interface ClusterServerlessUsageLimits {
@@ -355,6 +367,10 @@ export interface GetClusterRegion {
      */
     internalDns: string;
     /**
+     * Machine type identifier per node in this region, e.g., m6.xlarge, n2-standard-4. May differ across regions in a heterogeneous Advanced cluster. Only populated for Advanced clusters.
+     */
+    machineType: string;
+    /**
      * Region code used by the cluster's cloud provider.
      */
     name: string;
@@ -362,6 +378,10 @@ export interface GetClusterRegion {
      * Number of nodes in the region. Will always be 0 for serverless clusters.
      */
     nodeCount: number;
+    /**
+     * Number of virtual CPUs per node in this region. May differ across regions in a heterogeneous Advanced cluster. Only populated for Advanced clusters.
+     */
+    numVirtualCpus: number;
     /**
      * Denotes whether this is the primary region in a serverless cluster. Dedicated clusters don't have a primary region.
      */
@@ -400,6 +420,10 @@ export interface GetClusterServerless {
      */
     upgradeType: string;
     usageLimits: outputs.GetClusterServerlessUsageLimits;
+    /**
+     * This field is set to null for internal reasons and can be safely ignored.
+     */
+    withEmptyIpAllowlist: boolean;
 }
 
 export interface GetClusterServerlessUsageLimits {
@@ -565,6 +589,10 @@ export interface LogExportConfigGroup {
      * A list of CockroachDB log channels to include in this group.
      */
     channels: string[];
+    /**
+     * Enables the sending queue for logs in this group. Only one group can have enableSendingQueue enabled.
+     */
+    enableSendingQueue?: boolean;
     /**
      * The name of the group, reflected in the log sink.
      */
@@ -743,6 +771,8 @@ export interface UserRoleGrantRole {
      *   * METRICS_VIEWER
      *   * CLUSTER_MONITOR
      *   * BILLING_VIEWER
+     *   * AUDITOR
+     *   * CLUSTER_DATA_ACCESSOR
      */
     roleName: string;
 }
@@ -753,7 +783,7 @@ export interface UserRoleGrantsRole {
      */
     resourceId?: string;
     /**
-     * Type of resource. Allowed values are: 
+     * Type of resource. Allowed values are:
      *   * ORGANIZATION
      *   * CLUSTER
      *   * FOLDER
@@ -773,6 +803,8 @@ export interface UserRoleGrantsRole {
      *   * METRICS_VIEWER
      *   * CLUSTER_MONITOR
      *   * BILLING_VIEWER
+     *   * AUDITOR
+     *   * CLUSTER_DATA_ACCESSOR
      */
     roleName: string;
 }

@@ -48,6 +48,7 @@ export interface GetClusterResult {
     readonly customerCloudAccount: outputs.GetClusterCustomerCloudAccount;
     readonly dedicated: outputs.GetClusterDedicated;
     readonly deleteProtection: boolean;
+    readonly edition: string;
     readonly fullVersion: string;
     readonly id: string;
     readonly labels: {[key: string]: string};

@@ -38,6 +38,35 @@ import * as utilities from "./utilities";
  *         "cost-center": "mkt-1234",
  *     },
  * });
+ * // A heterogeneous Advanced cluster: each region uses a different machine size.
+ * // Per-region num_virtual_cpus/machine_type are mutually exclusive with the
+ * // cluster-wide dedicated.num_virtual_cpus/machine_type, and must be set on every
+ * // region. This requires a feature flag to be enabled on your organization.
+ * const advancedHeterogeneous = new cockroach.Cluster("advanced_heterogeneous", {
+ *     name: "cockroach-advanced-heterogeneous",
+ *     cloudProvider: "GCP",
+ *     plan: "ADVANCED",
+ *     dedicated: {
+ *         storageGib: 15,
+ *     },
+ *     regions: [
+ *         {
+ *             name: "us-central1",
+ *             nodeCount: 3,
+ *             numVirtualCpus: 4,
+ *         },
+ *         {
+ *             name: "us-east1",
+ *             nodeCount: 3,
+ *             numVirtualCpus: 8,
+ *         },
+ *         {
+ *             name: "us-west1",
+ *             nodeCount: 3,
+ *             numVirtualCpus: 8,
+ *         },
+ *     ],
+ * });
  * const standard = new cockroach.Cluster("standard", {
  *     name: "cockroach-standard",
  *     cloudProvider: "GCP",
@@ -73,6 +102,70 @@ import * as utilities from "./utilities";
  *     deleteProtection: false,
  *     labels: {
  *         environment: "staging",
+ *         "cost-center": "mkt-1234",
+ *     },
+ * });
+ * const basicLockedDown = new cockroach.Cluster("basic_locked_down", {
+ *     name: "cockroach-basic-restricted",
+ *     cloudProvider: "GCP",
+ *     plan: "BASIC",
+ *     serverless: {
+ *         withEmptyIpAllowlist: true,
+ *     },
+ *     regions: [{
+ *         name: "us-east1",
+ *     }],
+ *     deleteProtection: false,
+ * });
+ * const home = new cockroach.AllowList("home", {
+ *     name: "home",
+ *     cidrIp: "123.123.1.1",
+ *     cidrMask: 32,
+ *     ui: true,
+ *     sql: true,
+ *     clusterId: basicLockedDown.id,
+ * });
+ * // Clusters in Cockroach Continuum organizations set an edition instead of a
+ * // plan. STANDARD clusters are serverless and MISSION_CRITICAL clusters are
+ * // dedicated.
+ * const continuumStandard = new cockroach.Cluster("continuum_standard", {
+ *     name: "cockroach-continuum-standard",
+ *     cloudProvider: "GCP",
+ *     edition: "STANDARD",
+ *     serverless: {
+ *         usageLimits: {
+ *             provisionedVirtualCpus: 2,
+ *         },
+ *         upgradeType: "AUTOMATIC",
+ *     },
+ *     regions: [{
+ *         name: "us-east1",
+ *     }],
+ *     backupConfig: {
+ *         enabled: true,
+ *         frequencyMinutes: 60,
+ *         retentionDays: 30,
+ *     },
+ *     labels: {
+ *         environment: "production",
+ *         "cost-center": "hr-1234",
+ *     },
+ * });
+ * const continuumMissionCritical = new cockroach.Cluster("continuum_mission_critical", {
+ *     name: "cockroach-continuum-mission-critical",
+ *     cloudProvider: "GCP",
+ *     edition: "MISSION_CRITICAL",
+ *     dedicated: {
+ *         storageGib: 15,
+ *         numVirtualCpus: 4,
+ *     },
+ *     regions: [{
+ *         name: "us-central1",
+ *         nodeCount: 3,
+ *     }],
+ *     deleteProtection: true,
+ *     labels: {
+ *         environment: "production",
  *         "cost-center": "mkt-1234",
  *     },
  * });
@@ -148,6 +241,12 @@ export class Cluster extends pulumi.CustomResource {
      */
     declare public readonly deleteProtection: pulumi.Output<boolean>;
     /**
+     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
+     *   * STANDARD
+     *   * MISSION_CRITICAL
+     */
+    declare public readonly edition: pulumi.Output<string>;
+    /**
      * The full version string of CockroachDB running on the cluster. (e.g. v25.0.1)
      */
     declare public /*out*/ readonly fullVersion: pulumi.Output<string>;
@@ -203,6 +302,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["customerCloudAccount"] = state?.customerCloudAccount;
             resourceInputs["dedicated"] = state?.dedicated;
             resourceInputs["deleteProtection"] = state?.deleteProtection;
+            resourceInputs["edition"] = state?.edition;
             resourceInputs["fullVersion"] = state?.fullVersion;
             resourceInputs["labels"] = state?.labels;
             resourceInputs["name"] = state?.name;
@@ -227,6 +327,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["customerCloudAccount"] = args?.customerCloudAccount;
             resourceInputs["dedicated"] = args?.dedicated;
             resourceInputs["deleteProtection"] = args?.deleteProtection;
+            resourceInputs["edition"] = args?.edition;
             resourceInputs["labels"] = args?.labels;
             resourceInputs["name"] = args?.name;
             resourceInputs["parentId"] = args?.parentId;
@@ -282,6 +383,12 @@ export interface ClusterState {
      * Set to true to enable delete protection on the cluster. If unset, the server chooses the value on cluster creation, and preserves the value on cluster update.
      */
     deleteProtection?: pulumi.Input<boolean | undefined>;
+    /**
+     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
+     *   * STANDARD
+     *   * MISSION_CRITICAL
+     */
+    edition?: pulumi.Input<string | undefined>;
     /**
      * The full version string of CockroachDB running on the cluster. (e.g. v25.0.1)
      */
@@ -347,6 +454,12 @@ export interface ClusterArgs {
      * Set to true to enable delete protection on the cluster. If unset, the server chooses the value on cluster creation, and preserves the value on cluster update.
      */
     deleteProtection?: pulumi.Input<boolean | undefined>;
+    /**
+     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
+     *   * STANDARD
+     *   * MISSION_CRITICAL
+     */
+    edition?: pulumi.Input<string | undefined>;
     /**
      * Map of key-value pairs used to organize and categorize resources. If unset, labels will not be managed by Terraform. If set, labels defined in Terraform will overwrite any labels configured outside this platform.
      */

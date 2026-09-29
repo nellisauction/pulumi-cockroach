@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
 /**
- * Physical replication stream.
+ * Physical replication stream. Destroying a stream that has not failed over cancels it, which stops replication without promoting the standby cluster.
  *
  * ## Example Usage
  *

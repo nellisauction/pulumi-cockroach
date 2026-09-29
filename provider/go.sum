@@ -163,10 +163,10 @@ github.com/cloudflare/circl v1.6.3 h1:9GPOhQGF9MCYUeXyMYlqTR6a5gTrgR/fBLXvUgtVcg
 github.com/cloudflare/circl v1.6.3/go.mod h1:2eXP6Qfat4O/Yhh8BznvKnJ+uzEoTQ6jVKJRn81BiS4=
 github.com/cncf/xds/go v0.0.0-20260202195803-dba9d589def2 h1:aBangftG7EVZoUb69Os8IaYg++6uMOdKK83QtkkvJik=
 github.com/cncf/xds/go v0.0.0-20260202195803-dba9d589def2/go.mod h1:qwXFYgsP6T7XnJtbKlf1HP8AjxZZyzxMmc+Lq5GjlU4=
-github.com/cockroachdb/cockroach-cloud-sdk-go/v7 v7.1.0 h1:wTZCL/HBNb3CQkDzmfr3zYqHVdrNIxuO4Tp7WduQ0Fk=
-github.com/cockroachdb/cockroach-cloud-sdk-go/v7 v7.1.0/go.mod h1:48VTh04PnG4eVTFHRqnC0XUVr9hDRCXp89ZJKi0hUqQ=
-github.com/cockroachdb/terraform-provider-cockroach v1.20.0 h1:LpCbze9hxi4lprBPl6kAuG/BjzGiKqK+WoWZm/5oacc=
-github.com/cockroachdb/terraform-provider-cockroach v1.20.0/go.mod h1:Z2JZVTqCNJ+hFpzqeZ3z+Hn8rEp5tblVnGxFdvh8pY4=
+github.com/cockroachdb/cockroach-cloud-sdk-go/v10 v10.0.0 h1:4srAp+4gFdzjYVE5fbERAAsJfjZK5WJTa/oT8gOD/q4=
+github.com/cockroachdb/cockroach-cloud-sdk-go/v10 v10.0.0/go.mod h1:bMbNsrajB4QPkEKS7xL3uQSDyM7pCR/SJFdYfJjAFEk=
+github.com/cockroachdb/terraform-provider-cockroach v1.23.1 h1:uNyJXJMcwCvtrOtjhAROjVy4imvwaV1mvKlqAwFDFP8=
+github.com/cockroachdb/terraform-provider-cockroach v1.23.1/go.mod h1:ujRKmHTG+SwMeSrd0TyDnBeh1gupwja4Y9l5kB6sEcg=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
 github.com/cyphar/filepath-securejoin v0.6.1 h1:5CeZ1jPXEiYt3+Z6zqprSAgSWiggmpVyciv8syjIpVE=
 github.com/cyphar/filepath-securejoin v0.6.1/go.mod h1:A8hd4EnAeyujCJRrICiOWqjS1AX0a9kM5XL+NwKoYSc=

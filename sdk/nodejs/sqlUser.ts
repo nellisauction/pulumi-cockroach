@@ -18,7 +18,8 @@ import * as utilities from "./utilities";
  * const sqlUserPassword = config.require("sqlUserPassword");
  * const cockroach2 = new cockroach.SqlUser("cockroach", {
  *     name: "example-sql-user",
- *     password: sqlUserPassword,
+ *     passwordWo: sqlUserPassword,
+ *     passwordWoVersion: 1,
  *     clusterId: clusterId,
  * });
  * ```
@@ -65,9 +66,20 @@ export class SqlUser extends pulumi.CustomResource {
      */
     declare public readonly name: pulumi.Output<string>;
     /**
-     * If provided, this field sets the password of the SQL user when created. If omitted, a random password is generated, but not saved to Terraform state. The password must be changed via the CockroachDB cloud console.
+     * Deprecated. If provided, this field sets the password of the SQL user when created. The value is persisted in Terraform state, which is the reason for deprecation; prefer `passwordWo`. If omitted, a random password is generated and not saved to state. The password must be changed via the CockroachDB cloud console.
+     *
+     * @deprecated The `password` attribute persists the clear text password in Terraform state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations) to keep the credentials out of state. `password` will be removed in a future major release of the provider.
      */
     declare public readonly password: pulumi.Output<string | undefined>;
+    /**
+     * **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+     * Write-only password for the SQL user (Terraform CLI 1.11+ required). The value is sent on create and on rotation but never stored in Terraform state. To rotate, change the value and bump `passwordWoVersion`; without a version bump, Terraform cannot detect changes to a write-only attribute. Mutually exclusive with `password`.
+     */
+    declare public readonly passwordWo: pulumi.Output<string | undefined>;
+    /**
+     * Trigger attribute for rotating `passwordWo`. Increment this integer to force Terraform to re-apply the current `passwordWo` value. Only meaningful when `passwordWo` is set.
+     */
+    declare public readonly passwordWoVersion: pulumi.Output<number | undefined>;
 
     /**
      * Create a SqlUser resource with the given unique name, arguments, and options.
@@ -85,6 +97,8 @@ export class SqlUser extends pulumi.CustomResource {
             resourceInputs["clusterId"] = state?.clusterId;
             resourceInputs["name"] = state?.name;
             resourceInputs["password"] = state?.password;
+            resourceInputs["passwordWo"] = state?.passwordWo;
+            resourceInputs["passwordWoVersion"] = state?.passwordWoVersion;
         } else {
             const args = argsOrState as SqlUserArgs | undefined;
             if (args?.clusterId === undefined && !opts.urn) {
@@ -93,9 +107,11 @@ export class SqlUser extends pulumi.CustomResource {
             resourceInputs["clusterId"] = args?.clusterId;
             resourceInputs["name"] = args?.name;
             resourceInputs["password"] = args?.password ? pulumi.secret(args.password) : undefined;
+            resourceInputs["passwordWo"] = args?.passwordWo ? pulumi.secret(args.passwordWo) : undefined;
+            resourceInputs["passwordWoVersion"] = args?.passwordWoVersion;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
-        const secretOpts = { additionalSecretOutputs: ["password"] };
+        const secretOpts = { additionalSecretOutputs: ["password", "passwordWo"] };
         opts = pulumi.mergeOptions(opts, secretOpts);
         super(SqlUser.__pulumiType, name, resourceInputs, opts);
     }
@@ -111,9 +127,20 @@ export interface SqlUserState {
      */
     name?: pulumi.Input<string | undefined>;
     /**
-     * If provided, this field sets the password of the SQL user when created. If omitted, a random password is generated, but not saved to Terraform state. The password must be changed via the CockroachDB cloud console.
+     * Deprecated. If provided, this field sets the password of the SQL user when created. The value is persisted in Terraform state, which is the reason for deprecation; prefer `passwordWo`. If omitted, a random password is generated and not saved to state. The password must be changed via the CockroachDB cloud console.
+     *
+     * @deprecated The `password` attribute persists the clear text password in Terraform state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations) to keep the credentials out of state. `password` will be removed in a future major release of the provider.
      */
     password?: pulumi.Input<string | undefined>;
+    /**
+     * **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+     * Write-only password for the SQL user (Terraform CLI 1.11+ required). The value is sent on create and on rotation but never stored in Terraform state. To rotate, change the value and bump `passwordWoVersion`; without a version bump, Terraform cannot detect changes to a write-only attribute. Mutually exclusive with `password`.
+     */
+    passwordWo?: pulumi.Input<string | undefined>;
+    /**
+     * Trigger attribute for rotating `passwordWo`. Increment this integer to force Terraform to re-apply the current `passwordWo` value. Only meaningful when `passwordWo` is set.
+     */
+    passwordWoVersion?: pulumi.Input<number | undefined>;
 }
 
 /**
@@ -126,7 +153,18 @@ export interface SqlUserArgs {
      */
     name?: pulumi.Input<string | undefined>;
     /**
-     * If provided, this field sets the password of the SQL user when created. If omitted, a random password is generated, but not saved to Terraform state. The password must be changed via the CockroachDB cloud console.
+     * Deprecated. If provided, this field sets the password of the SQL user when created. The value is persisted in Terraform state, which is the reason for deprecation; prefer `passwordWo`. If omitted, a random password is generated and not saved to state. The password must be changed via the CockroachDB cloud console.
+     *
+     * @deprecated The `password` attribute persists the clear text password in Terraform state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations) to keep the credentials out of state. `password` will be removed in a future major release of the provider.
      */
     password?: pulumi.Input<string | undefined>;
+    /**
+     * **NOTE:** This field is write-only and its value will not be updated in state as part of read operations.
+     * Write-only password for the SQL user (Terraform CLI 1.11+ required). The value is sent on create and on rotation but never stored in Terraform state. To rotate, change the value and bump `passwordWoVersion`; without a version bump, Terraform cannot detect changes to a write-only attribute. Mutually exclusive with `password`.
+     */
+    passwordWo?: pulumi.Input<string | undefined>;
+    /**
+     * Trigger attribute for rotating `passwordWo`. Increment this integer to force Terraform to re-apply the current `passwordWo` value. Only meaningful when `passwordWo` is set.
+     */
+    passwordWoVersion?: pulumi.Input<number | undefined>;
 }

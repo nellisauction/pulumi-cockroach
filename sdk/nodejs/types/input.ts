@@ -69,7 +69,7 @@ export interface ClusterDedicated {
      */
     memoryGib?: pulumi.Input<number | undefined>;
     /**
-     * Number of virtual CPUs per node in the cluster.
+     * Number of virtual CPUs per node in the cluster. Mutually exclusive with per-region `regions[].num_virtual_cpus`/`machineType`.
      */
     numVirtualCpus?: pulumi.Input<number | undefined>;
     /**
@@ -92,6 +92,10 @@ export interface ClusterRegion {
      */
     internalDns?: pulumi.Input<string | undefined>;
     /**
+     * Machine type identifier per node in this region, e.g., m6.xlarge, n2-standard-4. Set this (or `numVirtualCpus`) on every region to create a heterogeneous Advanced cluster. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `numVirtualCpus` on the same region. This attribute requires a feature flag to be enabled; it is recommended to use `numVirtualCpus` instead. Valid for Advanced clusters only.
+     */
+    machineType?: pulumi.Input<string | undefined>;
+    /**
      * Name of the region. Should match the region code used by the cluster's cloud provider.
      */
     name: pulumi.Input<string>;
@@ -99,6 +103,10 @@ export interface ClusterRegion {
      * Number of nodes in the region. Valid for Advanced clusters only.
      */
     nodeCount?: pulumi.Input<number | undefined>;
+    /**
+     * Number of virtual CPUs per node in this region. Set this (or `machineType`) on every region to create a heterogeneous Advanced cluster whose regions use different machine types. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `machineType` on the same region. Requires a feature flag to be enabled; valid for Advanced clusters only.
+     */
+    numVirtualCpus?: pulumi.Input<number | undefined>;
     /**
      * Set to true to mark this region as the primary for a serverless cluster. Exactly one region must be primary. Dedicated clusters expect to have no primary region.
      */
@@ -139,6 +147,10 @@ export interface ClusterServerless {
      */
     upgradeType?: pulumi.Input<string | undefined>;
     usageLimits?: pulumi.Input<inputs.ClusterServerlessUsageLimits | undefined>;
+    /**
+     * Set to true to create the cluster with no default entries to the IP allowlist, blocking inbound connections until entries are added manually. This field is not used after cluster creation; to add new allowlist entries, configure your cluster as normal.
+     */
+    withEmptyIpAllowlist?: pulumi.Input<boolean | undefined>;
 }
 
 export interface ClusterServerlessUsageLimits {
@@ -254,6 +266,10 @@ export interface LogExportConfigGroup {
      * A list of CockroachDB log channels to include in this group.
      */
     channels: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Enables the sending queue for logs in this group. Only one group can have enableSendingQueue enabled.
+     */
+    enableSendingQueue?: pulumi.Input<boolean | undefined>;
     /**
      * The name of the group, reflected in the log sink.
      */
@@ -432,6 +448,8 @@ export interface UserRoleGrantRole {
      *   * METRICS_VIEWER
      *   * CLUSTER_MONITOR
      *   * BILLING_VIEWER
+     *   * AUDITOR
+     *   * CLUSTER_DATA_ACCESSOR
      */
     roleName: pulumi.Input<string>;
 }
@@ -442,7 +460,7 @@ export interface UserRoleGrantsRole {
      */
     resourceId?: pulumi.Input<string | undefined>;
     /**
-     * Type of resource. Allowed values are: 
+     * Type of resource. Allowed values are:
      *   * ORGANIZATION
      *   * CLUSTER
      *   * FOLDER
@@ -462,6 +480,8 @@ export interface UserRoleGrantsRole {
      *   * METRICS_VIEWER
      *   * CLUSTER_MONITOR
      *   * BILLING_VIEWER
+     *   * AUDITOR
+     *   * CLUSTER_DATA_ACCESSOR
      */
     roleName: pulumi.Input<string>;
 }
