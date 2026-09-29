@@ -30,6 +30,11 @@ export type Cluster = import("./cluster").Cluster;
 export const Cluster: typeof import("./cluster").Cluster = null as any;
 utilities.lazyLoad(exports, ["Cluster"], () => require("./cluster"));
 
+export { ClusterRuntimeScanningArgs, ClusterRuntimeScanningState } from "./clusterRuntimeScanning";
+export type ClusterRuntimeScanning = import("./clusterRuntimeScanning").ClusterRuntimeScanning;
+export const ClusterRuntimeScanning: typeof import("./clusterRuntimeScanning").ClusterRuntimeScanning = null as any;
+utilities.lazyLoad(exports, ["ClusterRuntimeScanning"], () => require("./clusterRuntimeScanning"));
+
 export { CmekArgs, CmekState } from "./cmek";
 export type Cmek = import("./cmek").Cmek;
 export const Cmek: typeof import("./cmek").Cmek = null as any;
@@ -222,6 +227,8 @@ const _module = {
                 return new ClientCaCert(name, <any>undefined, { urn })
             case "cockroach:index/cluster:Cluster":
                 return new Cluster(name, <any>undefined, { urn })
+            case "cockroach:index/clusterRuntimeScanning:ClusterRuntimeScanning":
+                return new ClusterRuntimeScanning(name, <any>undefined, { urn })
             case "cockroach:index/cmek:Cmek":
                 return new Cmek(name, <any>undefined, { urn })
             case "cockroach:index/database:Database":
@@ -280,6 +287,7 @@ pulumi.runtime.registerResourceModule("cockroach", "index/apiKey", _module)
 pulumi.runtime.registerResourceModule("cockroach", "index/blackoutWindow", _module)
 pulumi.runtime.registerResourceModule("cockroach", "index/clientCaCert", _module)
 pulumi.runtime.registerResourceModule("cockroach", "index/cluster", _module)
+pulumi.runtime.registerResourceModule("cockroach", "index/clusterRuntimeScanning", _module)
 pulumi.runtime.registerResourceModule("cockroach", "index/cmek", _module)
 pulumi.runtime.registerResourceModule("cockroach", "index/database", _module)
 pulumi.runtime.registerResourceModule("cockroach", "index/egressPrivateEndpoint", _module)

@@ -74,8 +74,8 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/cncf/xds/go v0.0.0-20260202195803-dba9d589def2 // indirect
-	github.com/cockroachdb/cockroach-cloud-sdk-go/v7 v7.1.0 // indirect
-	github.com/cockroachdb/terraform-provider-cockroach v1.20.0 // indirect
+	github.com/cockroachdb/cockroach-cloud-sdk-go/v10 v10.0.0 // indirect
+	github.com/cockroachdb/terraform-provider-cockroach v1.23.1 // indirect
 	github.com/cyphar/filepath-securejoin v0.6.1 // indirect
 	github.com/deckarep/golang-set/v2 v2.5.0 // indirect
 	github.com/djherbis/times v1.6.0 // indirect

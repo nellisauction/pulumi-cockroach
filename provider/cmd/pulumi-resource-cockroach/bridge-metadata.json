@@ -21,6 +21,9 @@
                     }
                 }
             },
+            "cockroach_cluster_runtime_scanning": {
+                "current": "cockroach:index/clusterRuntimeScanning:ClusterRuntimeScanning"
+            },
             "cockroach_cmek": {
                 "current": "cockroach:index/cmek:Cmek",
                 "fields": {

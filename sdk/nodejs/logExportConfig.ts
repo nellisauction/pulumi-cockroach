@@ -34,6 +34,7 @@ import * as utilities from "./utilities";
  *                 "SQL_EXEC",
  *             ],
  *             redact: false,
+ *             enableSendingQueue: true,
  *         },
  *         {
  *             logName: "devops",
@@ -127,6 +128,8 @@ export class LogExportConfig extends pulumi.CustomResource {
      *   * AWS_CLOUDWATCH
      *   * GCP_CLOUD_LOGGING
      *   * AZURE_LOG_ANALYTICS
+     *   * AZURE_LOG_ANALYTICS_V2
+     *   * OTLP_HTTP
      */
     declare public readonly type: pulumi.Output<string>;
     /**
@@ -243,6 +246,8 @@ export interface LogExportConfigState {
      *   * AWS_CLOUDWATCH
      *   * GCP_CLOUD_LOGGING
      *   * AZURE_LOG_ANALYTICS
+     *   * AZURE_LOG_ANALYTICS_V2
+     *   * OTLP_HTTP
      */
     type?: pulumi.Input<string | undefined>;
     /**
@@ -293,6 +298,8 @@ export interface LogExportConfigArgs {
      *   * AWS_CLOUDWATCH
      *   * GCP_CLOUD_LOGGING
      *   * AZURE_LOG_ANALYTICS
+     *   * AZURE_LOG_ANALYTICS_V2
+     *   * OTLP_HTTP
      */
     type: pulumi.Input<string>;
 }

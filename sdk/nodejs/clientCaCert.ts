@@ -67,7 +67,7 @@ export class ClientCaCert extends pulumi.CustomResource {
      */
     declare public /*out*/ readonly status: pulumi.Output<string>;
     /**
-     * X509 certificate in PEM format.
+     * X509 certificate in PEM format. This value is a PEM bundle and may contain multiple concatenated CA certificates. To rotate the CA cert without downtime, see Rotating client CA certs.
      */
     declare public readonly x509PemCert: pulumi.Output<string>;
 
@@ -117,7 +117,7 @@ export interface ClientCaCertState {
      */
     status?: pulumi.Input<string | undefined>;
     /**
-     * X509 certificate in PEM format.
+     * X509 certificate in PEM format. This value is a PEM bundle and may contain multiple concatenated CA certificates. To rotate the CA cert without downtime, see Rotating client CA certs.
      */
     x509PemCert?: pulumi.Input<string | undefined>;
 }
@@ -131,7 +131,7 @@ export interface ClientCaCertArgs {
      */
     clientCaCertId: pulumi.Input<string>;
     /**
-     * X509 certificate in PEM format.
+     * X509 certificate in PEM format. This value is a PEM bundle and may contain multiple concatenated CA certificates. To rotate the CA cert without downtime, see Rotating client CA certs.
      */
     x509PemCert: pulumi.Input<string>;
 }
