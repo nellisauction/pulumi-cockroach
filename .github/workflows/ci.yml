@@ -28,10 +28,6 @@ jobs:
       - name: Test Provider
         run: make test_provider PROVIDER_VERSION=0.0.0-ci
 
-  # Fan-in gate producing the org-required "allow-merge / allow-merge" status
-  # check. This mirrors nellisauction/.github/.github/workflows/allow-merge.yml
-  # inline because that repo is private and this repo is public, and GitHub
-  # does not allow public repos to call reusable workflows from private repos.
   allow-merge:
     name: allow-merge / allow-merge
     if: always()
