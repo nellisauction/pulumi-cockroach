@@ -49,6 +49,18 @@ func Provider() tfbridge.ProviderInfo {
 				},
 			},
 		},
+		Resources: map[string]*tfbridge.ResourceInfo{
+			"cockroach_sql_user": {
+				Fields: map[string]*tfbridge.SchemaInfo{
+					"password": {
+						DeprecationMessage: "The `password` attribute persists the clear text password in state. " +
+							"Migrate to `passwordWo` (with `passwordWoVersion` for rotations): Pulumi keeps `passwordWo` " +
+							"only as an encrypted secret input and never in resource outputs or Terraform state. " +
+							"`password` will be removed in a future major release of the provider.",
+					},
+				},
+			},
+		},
 		JavaScript: &tfbridge.JavaScriptInfo{
 			PackageName:          "@nellisauction/pulumi-cockroach",
 			RespectSchemaVersion: true,

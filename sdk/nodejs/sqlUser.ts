@@ -68,7 +68,7 @@ export class SqlUser extends pulumi.CustomResource {
     /**
      * Deprecated. If provided, this field sets the password of the SQL user when created. The value is persisted in Terraform state, which is the reason for deprecation; prefer `passwordWo`. If omitted, a random password is generated and not saved to state. The password must be changed via the CockroachDB cloud console.
      *
-     * @deprecated The `password` attribute persists the clear text password in Terraform state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations) to keep the credentials out of state. `password` will be removed in a future major release of the provider.
+     * @deprecated The `password` attribute persists the clear text password in state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations): Pulumi keeps `passwordWo` only as an encrypted secret input and never in resource outputs or Terraform state. `password` will be removed in a future major release of the provider.
      */
     declare public readonly password: pulumi.Output<string | undefined>;
     /**
@@ -129,7 +129,7 @@ export interface SqlUserState {
     /**
      * Deprecated. If provided, this field sets the password of the SQL user when created. The value is persisted in Terraform state, which is the reason for deprecation; prefer `passwordWo`. If omitted, a random password is generated and not saved to state. The password must be changed via the CockroachDB cloud console.
      *
-     * @deprecated The `password` attribute persists the clear text password in Terraform state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations) to keep the credentials out of state. `password` will be removed in a future major release of the provider.
+     * @deprecated The `password` attribute persists the clear text password in state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations): Pulumi keeps `passwordWo` only as an encrypted secret input and never in resource outputs or Terraform state. `password` will be removed in a future major release of the provider.
      */
     password?: pulumi.Input<string | undefined>;
     /**
@@ -155,7 +155,7 @@ export interface SqlUserArgs {
     /**
      * Deprecated. If provided, this field sets the password of the SQL user when created. The value is persisted in Terraform state, which is the reason for deprecation; prefer `passwordWo`. If omitted, a random password is generated and not saved to state. The password must be changed via the CockroachDB cloud console.
      *
-     * @deprecated The `password` attribute persists the clear text password in Terraform state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations) to keep the credentials out of state. `password` will be removed in a future major release of the provider.
+     * @deprecated The `password` attribute persists the clear text password in state. Migrate to `passwordWo` (with `passwordWoVersion` for rotations): Pulumi keeps `passwordWo` only as an encrypted secret input and never in resource outputs or Terraform state. `password` will be removed in a future major release of the provider.
      */
     password?: pulumi.Input<string | undefined>;
     /**
