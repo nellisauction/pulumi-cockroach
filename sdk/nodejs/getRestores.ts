@@ -82,10 +82,6 @@ export interface GetRestoresResult {
      */
     readonly endTime?: string;
     /**
-     * The provider-assigned unique ID for this managed resource.
-     */
-    readonly id: string;
-    /**
      * The maximum number of restore jobs to return. If not set, only the first 500 restore jobs will be returned.
      */
     readonly limit?: number;

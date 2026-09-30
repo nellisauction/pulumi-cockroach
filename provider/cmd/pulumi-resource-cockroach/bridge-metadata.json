@@ -251,5 +251,147 @@
             }
         }
     },
-    "auto-settings": {}
+    "auto-settings": {},
+    "default-resource-schema-fixups": {
+        "resources": {
+            "cockroach_allow_list": {},
+            "cockroach_api_key": {},
+            "cockroach_blackout_window": {},
+            "cockroach_client_ca_cert": {
+                "fields": {
+                    "id": {
+                        "name": "clientCaCertId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "clientCaCertId"
+                }
+            },
+            "cockroach_cluster": {},
+            "cockroach_cluster_runtime_scanning": {},
+            "cockroach_cmek": {
+                "fields": {
+                    "id": {
+                        "name": "cmekId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "cmekId"
+                }
+            },
+            "cockroach_database": {},
+            "cockroach_egress_private_endpoint": {},
+            "cockroach_egress_private_endpoint_domain_names": {
+                "computeID": {
+                    "kind": "missing"
+                }
+            },
+            "cockroach_egress_rule": {},
+            "cockroach_egress_traffic_policy": {
+                "fields": {
+                    "id": {
+                        "name": "egressTrafficPolicyId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "egressTrafficPolicyId"
+                }
+            },
+            "cockroach_finalize_version_upgrade": {
+                "fields": {
+                    "id": {
+                        "name": "finalizeVersionUpgradeId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "finalizeVersionUpgradeId"
+                }
+            },
+            "cockroach_folder": {},
+            "cockroach_jwt_issuer": {},
+            "cockroach_log_export_config": {
+                "fields": {
+                    "id": {
+                        "name": "logExportConfigId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "logExportConfigId"
+                }
+            },
+            "cockroach_maintenance_window": {
+                "fields": {
+                    "id": {
+                        "name": "maintenanceWindowId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "maintenanceWindowId"
+                }
+            },
+            "cockroach_metric_export_cloudwatch_config": {
+                "fields": {
+                    "id": {
+                        "name": "metricExportCloudwatchConfigId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "metricExportCloudwatchConfigId"
+                }
+            },
+            "cockroach_metric_export_datadog_config": {
+                "fields": {
+                    "id": {
+                        "name": "metricExportDatadogConfigId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "metricExportDatadogConfigId"
+                }
+            },
+            "cockroach_metric_export_prometheus_config": {
+                "fields": {
+                    "id": {
+                        "name": "metricExportPrometheusConfigId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "metricExportPrometheusConfigId"
+                }
+            },
+            "cockroach_physical_replication_stream": {},
+            "cockroach_private_endpoint_connection": {},
+            "cockroach_private_endpoint_services": {},
+            "cockroach_private_endpoint_trusted_owner": {},
+            "cockroach_restore": {},
+            "cockroach_service_account": {},
+            "cockroach_sql_user": {},
+            "cockroach_user_role_grant": {
+                "computeID": {
+                    "kind": "missing"
+                }
+            },
+            "cockroach_user_role_grants": {},
+            "cockroach_version_deferral": {
+                "fields": {
+                    "id": {
+                        "name": "versionDeferralId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "versionDeferralId"
+                }
+            }
+        }
+    }
 }
