@@ -81,10 +81,6 @@ export interface GetBlackoutWindowsResult {
      */
     readonly clusterId: string;
     /**
-     * The provider-assigned unique ID for this managed resource.
-     */
-    readonly id: string;
-    /**
      * Maximum number of blackout windows to return in a single response. Defaults to 100 when not set.
      */
     readonly limit?: number;

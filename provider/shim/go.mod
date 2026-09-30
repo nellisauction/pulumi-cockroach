@@ -1,6 +1,6 @@
 module github.com/cockroachdb/terraform-provider-cockroach/shim
 
-go 1.25.9
+go 1.27.1
 
 require (
 	github.com/cockroachdb/terraform-provider-cockroach v1.23.1
