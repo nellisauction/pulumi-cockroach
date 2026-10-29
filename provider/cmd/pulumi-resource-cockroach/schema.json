@@ -4217,6 +4217,7 @@
                 },
                 "required": [
                     "accountId",
+                    "backupConfig",
                     "cloudProvider",
                     "cockroachVersion",
                     "creatorId",

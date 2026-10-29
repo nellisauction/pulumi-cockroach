@@ -41,7 +41,7 @@ export interface GetClusterArgs {
  */
 export interface GetClusterResult {
     readonly accountId: string;
-    readonly backupConfig?: outputs.GetClusterBackupConfig;
+    readonly backupConfig: outputs.GetClusterBackupConfig;
     readonly cloudProvider: string;
     readonly cockroachVersion: string;
     readonly creatorId: string;

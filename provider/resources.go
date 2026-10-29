@@ -3,6 +3,7 @@ package cockroach
 import (
 	"fmt"
 	"path/filepath"
+	"slices"
 
 	// Allow embedding bridge-metadata.json in the provider.
 	_ "embed"
@@ -97,7 +98,7 @@ func Provider() tfbridge.ProviderInfo {
 
 	clusterDS := prov.DataSources["cockroach_cluster"]
 	clusterDS.Fields = markComputedObjectsOptional(
-		prov.P.DataSourcesMap().Get("cockroach_cluster").Schema(), clusterDS.Fields)
+		prov.P.DataSourcesMap().Get("cockroach_cluster").Schema(), clusterDS.Fields, "backup_config")
 	prov.SetAutonaming(255, "-")
 
 	return prov
@@ -105,16 +106,19 @@ func Provider() tfbridge.ProviderInfo {
 
 // The cluster data source only populates the nested objects that apply to the
 // cluster (one of serverless/dedicated/host, one cloud account, etc.), but the
-// bridge types computed outputs as always present.
+// bridge types computed outputs as always present. alwaysPresent lists keys
+// the upstream read always populates (backup_config is fetched separately and
+// the read fails without it).
 func markComputedObjectsOptional(
-	sch shim.SchemaMap, fields map[string]*tfbridge.SchemaInfo,
+	sch shim.SchemaMap, fields map[string]*tfbridge.SchemaInfo, alwaysPresent ...string,
 ) map[string]*tfbridge.SchemaInfo {
 	if fields == nil {
 		fields = map[string]*tfbridge.SchemaInfo{}
 	}
 	sch.Range(func(key string, s shim.Schema) bool {
 		obj, ok := s.Elem().(shim.Resource)
-		if !ok || s.Type() != shim.TypeMap || !s.Computed() || s.Optional() {
+		if !ok || s.Type() != shim.TypeMap || !s.Computed() || s.Optional() ||
+			slices.Contains(alwaysPresent, key) {
 			return true
 		}
 		info := fields[key]
