@@ -117,7 +117,7 @@ export interface ClusterRegion {
     /**
      * Machine type identifier per node in this region, e.g., m6.xlarge, n2-standard-4. Set this (or `numVirtualCpus`) on every region to create a heterogeneous Advanced cluster. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `numVirtualCpus` on the same region. This attribute requires a feature flag to be enabled; it is recommended to use `numVirtualCpus` instead. Valid for Advanced clusters only, and not supported on host clusters.
      */
-    machineType: string;
+    machineType?: string;
     /**
      * Name of the region. Should match the region code used by the cluster's cloud provider.
      */
@@ -129,7 +129,7 @@ export interface ClusterRegion {
     /**
      * Number of virtual CPUs per node in this region. Set this (or `machineType`) on every region to create a heterogeneous Advanced cluster whose regions use different machine types. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `machineType` on the same region. Requires a feature flag to be enabled; valid for Advanced clusters only.
      */
-    numVirtualCpus: number;
+    numVirtualCpus?: number;
     /**
      * Set to true to mark this region as the primary for a serverless cluster. Exactly one region must be primary. Dedicated clusters expect to have no primary region.
      */
@@ -173,7 +173,7 @@ export interface ClusterServerless {
     /**
      * Set to true to create the cluster with no default entries to the IP allowlist, blocking inbound connections until entries are added manually. This field is not used after cluster creation; to add new allowlist entries, configure your cluster as normal.
      */
-    withEmptyIpAllowlist: boolean;
+    withEmptyIpAllowlist?: boolean;
 }
 
 export interface ClusterServerlessUsageLimits {
@@ -403,7 +403,7 @@ export interface GetClusterDedicated {
     /**
      * Specifies whether an Advanced cluster is started with a virtual cluster architecture.
      */
-    supportsClusterVirtualization: boolean;
+    supportsClusterVirtualization?: boolean;
 }
 
 export interface GetClusterHost {
@@ -437,7 +437,7 @@ export interface GetClusterRegion {
     /**
      * Machine type identifier per node in this region, e.g., m6.xlarge, n2-standard-4. May differ across regions in a heterogeneous Advanced cluster. Only populated for Advanced clusters.
      */
-    machineType: string;
+    machineType?: string;
     /**
      * Region code used by the cluster's cloud provider.
      */
@@ -449,7 +449,7 @@ export interface GetClusterRegion {
     /**
      * Number of virtual CPUs per node in this region. May differ across regions in a heterogeneous Advanced cluster. Only populated for Advanced clusters.
      */
-    numVirtualCpus: number;
+    numVirtualCpus?: number;
     /**
      * Denotes whether this is the primary region in a serverless cluster. Dedicated clusters don't have a primary region.
      */
@@ -482,7 +482,7 @@ export interface GetClusterServerless {
      *
      * @deprecated The `spendLimit` attribute is deprecated and will be removed in a future release of the provider. Configure 'usage_limits' instead.
      */
-    spendLimit: number;
+    spendLimit?: number;
     /**
      * Dictates the behavior of CockroachDB major version upgrades.
      */
@@ -491,22 +491,22 @@ export interface GetClusterServerless {
     /**
      * This field is set to null for internal reasons and can be safely ignored.
      */
-    withEmptyIpAllowlist: boolean;
+    withEmptyIpAllowlist?: boolean;
 }
 
 export interface GetClusterServerlessUsageLimits {
     /**
      * Maximum number of vCPUs that the cluster can use.
      */
-    provisionedVirtualCpus: number;
+    provisionedVirtualCpus?: number;
     /**
      * Maximum number of Request Units that the cluster can consume during the month.
      */
-    requestUnitLimit: number;
+    requestUnitLimit?: number;
     /**
      * Maximum amount of storage (in MiB) that the cluster can have at any time during the month.
      */
-    storageMibLimit: number;
+    storageMibLimit?: number;
 }
 
 export interface GetConnectionStringConnectionParams {

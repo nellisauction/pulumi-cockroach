@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"slices"
+	"strings"
 
 	// Allow embedding bridge-metadata.json in the provider.
 	_ "embed"
@@ -99,9 +100,70 @@ func Provider() tfbridge.ProviderInfo {
 	clusterDS := prov.DataSources["cockroach_cluster"]
 	clusterDS.Fields = markComputedObjectsOptional(
 		prov.P.DataSourcesMap().Get("cockroach_cluster").Schema(), clusterDS.Fields, "backup_config")
+	markOptional(prov.P.DataSourcesMap().Get("cockroach_cluster").Schema(), clusterDS.Fields,
+		"account_id", "plan", "edition", "parent_id",
+		"serverless.spend_limit", "serverless.with_empty_ip_allowlist",
+		"serverless.usage_limits.request_unit_limit",
+		"serverless.usage_limits.storage_mib_limit",
+		"serverless.usage_limits.provisioned_virtual_cpus",
+		"dedicated.supports_cluster_virtualization",
+		"regions.machine_type", "regions.num_virtual_cpus")
+
+	clusterRes := prov.Resources["cockroach_cluster"]
+	if clusterRes.Fields == nil {
+		clusterRes.Fields = map[string]*tfbridge.SchemaInfo{}
+	}
+	markOptional(prov.P.ResourcesMap().Get("cockroach_cluster").Schema(), clusterRes.Fields,
+		"account_id", "plan", "edition", "parent_id",
+		"serverless.with_empty_ip_allowlist",
+		"regions.machine_type", "regions.num_virtual_cpus")
 	prov.SetAutonaming(255, "-")
 
 	return prov
+}
+
+// markOptional types computed scalars as optional outputs. The upstream read
+// leaves these null whenever the API omits them (plan vs edition, no parent
+// folder, homogeneous regions) or never sets them outside a plan (data source
+// and import), but the bridge types every computed output as always present.
+// Paths are dot-separated TF attribute names.
+func markOptional(sch shim.SchemaMap, fields map[string]*tfbridge.SchemaInfo, paths ...string) {
+	for _, path := range paths {
+		keys := strings.Split(path, ".")
+		cur, curFields := sch, fields
+		for i, key := range keys {
+			s, ok := cur.GetOk(key)
+			if !ok {
+				panic(fmt.Sprintf("markOptional: unknown attribute %q in %q", key, path))
+			}
+			info := curFields[key]
+			if info == nil {
+				info = &tfbridge.SchemaInfo{}
+				curFields[key] = info
+			}
+			if i == len(keys)-1 {
+				info.MarkAsOptional = tfbridge.True()
+				break
+			}
+			if elem, ok := s.Elem().(shim.Schema); ok {
+				if info.Elem == nil {
+					info.Elem = &tfbridge.SchemaInfo{}
+				}
+				info, s = info.Elem, elem
+			}
+			obj, ok := s.Elem().(shim.Resource)
+			if !ok {
+				panic(fmt.Sprintf("markOptional: %q in %q is not an object", key, path))
+			}
+			if info.Elem == nil {
+				info.Elem = &tfbridge.SchemaInfo{}
+			}
+			if info.Elem.Fields == nil {
+				info.Elem.Fields = map[string]*tfbridge.SchemaInfo{}
+			}
+			cur, curFields = obj.Schema(), info.Elem.Fields
+		}
+	}
 }
 
 // The cluster data source only populates the nested objects that apply to the

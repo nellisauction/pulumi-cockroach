@@ -40,7 +40,7 @@ export interface GetClusterArgs {
  * A collection of values returned by getCluster.
  */
 export interface GetClusterResult {
-    readonly accountId: string;
+    readonly accountId?: string;
     readonly backupConfig: outputs.GetClusterBackupConfig;
     readonly cloudProvider: string;
     readonly cockroachVersion: string;
@@ -48,15 +48,15 @@ export interface GetClusterResult {
     readonly customerCloudAccount?: outputs.GetClusterCustomerCloudAccount;
     readonly dedicated?: outputs.GetClusterDedicated;
     readonly deleteProtection: boolean;
-    readonly edition: string;
+    readonly edition?: string;
     readonly fullVersion: string;
     readonly host?: outputs.GetClusterHost;
     readonly id: string;
     readonly labels: {[key: string]: string};
     readonly name: string;
     readonly operationStatus: string;
-    readonly parentId: string;
-    readonly plan: string;
+    readonly parentId?: string;
+    readonly plan?: string;
     readonly regions: outputs.GetClusterRegion[];
     readonly serverless?: outputs.GetClusterServerless;
     readonly state: string;

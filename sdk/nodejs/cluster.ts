@@ -228,7 +228,7 @@ export class Cluster extends pulumi.CustomResource {
     /**
      * The cloud provider account ID that hosts the cluster. Needed for CMEK and other advanced features.
      */
-    declare public /*out*/ readonly accountId: pulumi.Output<string>;
+    declare public /*out*/ readonly accountId: pulumi.Output<string | undefined>;
     /**
      * The backup settings for a cluster.
      *  Each cluster has backup settings that determine if backups are enabled, how frequently they are taken, and how long they are retained for. Use this attribute to manage those settings.
@@ -263,7 +263,7 @@ export class Cluster extends pulumi.CustomResource {
      *   * STANDARD
      *   * MISSION_CRITICAL
      */
-    declare public readonly edition: pulumi.Output<string>;
+    declare public readonly edition: pulumi.Output<string | undefined>;
     /**
      * The full version string of CockroachDB running on the cluster. (e.g. v25.0.1)
      */
@@ -287,11 +287,11 @@ export class Cluster extends pulumi.CustomResource {
     /**
      * The ID of the cluster's parent folder. 'root' is used for a cluster at the root level.
      */
-    declare public readonly parentId: pulumi.Output<string>;
+    declare public readonly parentId: pulumi.Output<string | undefined>;
     /**
      * Denotes cluster plan type: 'BASIC' or 'STANDARD' or 'ADVANCED'.
      */
-    declare public readonly plan: pulumi.Output<string>;
+    declare public readonly plan: pulumi.Output<string | undefined>;
     declare public readonly regions: pulumi.Output<outputs.ClusterRegion[]>;
     declare public readonly serverless: pulumi.Output<outputs.ClusterServerless | undefined>;
     /**
