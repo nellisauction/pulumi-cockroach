@@ -341,9 +341,9 @@ export interface GetClusterBackupConfig {
 }
 
 export interface GetClusterCustomerCloudAccount {
-    aws: outputs.GetClusterCustomerCloudAccountAws;
-    azure: outputs.GetClusterCustomerCloudAccountAzure;
-    gcp: outputs.GetClusterCustomerCloudAccountGcp;
+    aws?: outputs.GetClusterCustomerCloudAccountAws;
+    azure?: outputs.GetClusterCustomerCloudAccountAzure;
+    gcp?: outputs.GetClusterCustomerCloudAccountGcp;
 }
 
 export interface GetClusterCustomerCloudAccountAws {
@@ -487,7 +487,7 @@ export interface GetClusterServerless {
      * Dictates the behavior of CockroachDB major version upgrades.
      */
     upgradeType: string;
-    usageLimits: outputs.GetClusterServerlessUsageLimits;
+    usageLimits?: outputs.GetClusterServerlessUsageLimits;
     /**
      * This field is set to null for internal reasons and can be safely ignored.
      */

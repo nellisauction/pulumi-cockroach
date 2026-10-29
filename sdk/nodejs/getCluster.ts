@@ -45,12 +45,12 @@ export interface GetClusterResult {
     readonly cloudProvider: string;
     readonly cockroachVersion: string;
     readonly creatorId: string;
-    readonly customerCloudAccount: outputs.GetClusterCustomerCloudAccount;
-    readonly dedicated: outputs.GetClusterDedicated;
+    readonly customerCloudAccount?: outputs.GetClusterCustomerCloudAccount;
+    readonly dedicated?: outputs.GetClusterDedicated;
     readonly deleteProtection: boolean;
     readonly edition: string;
     readonly fullVersion: string;
-    readonly host: outputs.GetClusterHost;
+    readonly host?: outputs.GetClusterHost;
     readonly id: string;
     readonly labels: {[key: string]: string};
     readonly name: string;
@@ -58,7 +58,7 @@ export interface GetClusterResult {
     readonly parentId: string;
     readonly plan: string;
     readonly regions: outputs.GetClusterRegion[];
-    readonly serverless: outputs.GetClusterServerless;
+    readonly serverless?: outputs.GetClusterServerless;
     readonly state: string;
     readonly upgradeStatus: string;
 }
