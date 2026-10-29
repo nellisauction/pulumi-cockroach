@@ -169,6 +169,24 @@ import * as utilities from "./utilities";
  *         "cost-center": "mkt-1234",
  *     },
  * });
+ * const continuumHost = new cockroach.Cluster("continuum_host", {
+ *     name: "cockroach-continuum-host",
+ *     cloudProvider: "GCP",
+ *     edition: "MISSION_CRITICAL",
+ *     host: {
+ *         storageGib: 15,
+ *         numVirtualCpus: 4,
+ *     },
+ *     regions: [{
+ *         name: "us-central1",
+ *         nodeCount: 3,
+ *     }],
+ *     deleteProtection: true,
+ *     labels: {
+ *         environment: "production",
+ *         "cost-center": "mkt-1234",
+ *     },
+ * });
  * ```
  *
  * ## Import
@@ -241,7 +259,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     declare public readonly deleteProtection: pulumi.Output<boolean>;
     /**
-     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
+     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` or `host` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
      *   * STANDARD
      *   * MISSION_CRITICAL
      */
@@ -250,6 +268,10 @@ export class Cluster extends pulumi.CustomResource {
      * The full version string of CockroachDB running on the cluster. (e.g. v25.0.1)
      */
     declare public /*out*/ readonly fullVersion: pulumi.Output<string>;
+    /**
+     * Configures a host cluster, which provides dedicated hardware for virtual clusters. Host clusters are available only in Cockroach Continuum organizations.
+     */
+    declare public readonly host: pulumi.Output<outputs.ClusterHost | undefined>;
     /**
      * Map of key-value pairs used to organize and categorize resources. If unset, labels will not be managed by Terraform. If set, labels defined in Terraform will overwrite any labels configured outside this platform.
      */
@@ -276,6 +298,7 @@ export class Cluster extends pulumi.CustomResource {
      * Describes whether the cluster is being created, updated, deleted, etc.
      */
     declare public /*out*/ readonly state: pulumi.Output<string>;
+    declare public readonly timeouts: pulumi.Output<outputs.ClusterTimeouts | undefined>;
     /**
      * Describes the status of any in-progress CockroachDB upgrade or rollback.
      */
@@ -304,6 +327,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["deleteProtection"] = state?.deleteProtection;
             resourceInputs["edition"] = state?.edition;
             resourceInputs["fullVersion"] = state?.fullVersion;
+            resourceInputs["host"] = state?.host;
             resourceInputs["labels"] = state?.labels;
             resourceInputs["name"] = state?.name;
             resourceInputs["operationStatus"] = state?.operationStatus;
@@ -312,6 +336,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["regions"] = state?.regions;
             resourceInputs["serverless"] = state?.serverless;
             resourceInputs["state"] = state?.state;
+            resourceInputs["timeouts"] = state?.timeouts;
             resourceInputs["upgradeStatus"] = state?.upgradeStatus;
         } else {
             const args = argsOrState as ClusterArgs | undefined;
@@ -328,12 +353,14 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["dedicated"] = args?.dedicated;
             resourceInputs["deleteProtection"] = args?.deleteProtection;
             resourceInputs["edition"] = args?.edition;
+            resourceInputs["host"] = args?.host;
             resourceInputs["labels"] = args?.labels;
             resourceInputs["name"] = args?.name;
             resourceInputs["parentId"] = args?.parentId;
             resourceInputs["plan"] = args?.plan;
             resourceInputs["regions"] = args?.regions;
             resourceInputs["serverless"] = args?.serverless;
+            resourceInputs["timeouts"] = args?.timeouts;
             resourceInputs["accountId"] = undefined /*out*/;
             resourceInputs["creatorId"] = undefined /*out*/;
             resourceInputs["fullVersion"] = undefined /*out*/;
@@ -384,7 +411,7 @@ export interface ClusterState {
      */
     deleteProtection?: pulumi.Input<boolean | undefined>;
     /**
-     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
+     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` or `host` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
      *   * STANDARD
      *   * MISSION_CRITICAL
      */
@@ -393,6 +420,10 @@ export interface ClusterState {
      * The full version string of CockroachDB running on the cluster. (e.g. v25.0.1)
      */
     fullVersion?: pulumi.Input<string | undefined>;
+    /**
+     * Configures a host cluster, which provides dedicated hardware for virtual clusters. Host clusters are available only in Cockroach Continuum organizations.
+     */
+    host?: pulumi.Input<inputs.ClusterHost | undefined>;
     /**
      * Map of key-value pairs used to organize and categorize resources. If unset, labels will not be managed by Terraform. If set, labels defined in Terraform will overwrite any labels configured outside this platform.
      */
@@ -419,6 +450,7 @@ export interface ClusterState {
      * Describes whether the cluster is being created, updated, deleted, etc.
      */
     state?: pulumi.Input<string | undefined>;
+    timeouts?: pulumi.Input<inputs.ClusterTimeouts | undefined>;
     /**
      * Describes the status of any in-progress CockroachDB upgrade or rollback.
      */
@@ -455,11 +487,15 @@ export interface ClusterArgs {
      */
     deleteProtection?: pulumi.Input<boolean | undefined>;
     /**
-     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
+     * Denotes the cluster's edition. Clusters in Cockroach Continuum organizations set an `edition`; clusters in organizations that are not on Continuum set a `plan` instead, so `edition` and `plan` cannot both be set. `STANDARD` clusters require a `serverless` block and `MISSION_CRITICAL` clusters require a `dedicated` or `host` block. Changing the edition of an existing cluster is not currently supported. Allowed values are:
      *   * STANDARD
      *   * MISSION_CRITICAL
      */
     edition?: pulumi.Input<string | undefined>;
+    /**
+     * Configures a host cluster, which provides dedicated hardware for virtual clusters. Host clusters are available only in Cockroach Continuum organizations.
+     */
+    host?: pulumi.Input<inputs.ClusterHost | undefined>;
     /**
      * Map of key-value pairs used to organize and categorize resources. If unset, labels will not be managed by Terraform. If set, labels defined in Terraform will overwrite any labels configured outside this platform.
      */
@@ -478,4 +514,5 @@ export interface ClusterArgs {
     plan?: pulumi.Input<string | undefined>;
     regions: pulumi.Input<pulumi.Input<inputs.ClusterRegion>[]>;
     serverless?: pulumi.Input<inputs.ClusterServerless | undefined>;
+    timeouts?: pulumi.Input<inputs.ClusterTimeouts | undefined>;
 }

@@ -7,7 +7,7 @@ import * as outputs from "./types/output";
 import * as utilities from "./utilities";
 
 /**
- * CockroachDB Cloud cluster. Can be Dedicated or Serverless.
+ * CockroachDB Cloud cluster. Can be Dedicated, Host, or Serverless.
  *
  * ## Example Usage
  *
@@ -50,6 +50,7 @@ export interface GetClusterResult {
     readonly deleteProtection: boolean;
     readonly edition: string;
     readonly fullVersion: string;
+    readonly host: outputs.GetClusterHost;
     readonly id: string;
     readonly labels: {[key: string]: string};
     readonly name: string;
@@ -62,7 +63,7 @@ export interface GetClusterResult {
     readonly upgradeStatus: string;
 }
 /**
- * CockroachDB Cloud cluster. Can be Dedicated or Serverless.
+ * CockroachDB Cloud cluster. Can be Dedicated, Host, or Serverless.
  *
  * ## Example Usage
  *

@@ -3,7 +3,7 @@ module github.com/cockroachdb/terraform-provider-cockroach/shim
 go 1.27.1
 
 require (
-	github.com/cockroachdb/terraform-provider-cockroach v1.23.1
+	github.com/cockroachdb/terraform-provider-cockroach v1.24.1
 	github.com/hashicorp/terraform-plugin-framework v1.15.0
 )
 
@@ -33,6 +33,7 @@ require (
 	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/hashicorp/terraform-exec v0.23.0 // indirect
 	github.com/hashicorp/terraform-json v0.25.0 // indirect
+	github.com/hashicorp/terraform-plugin-framework-timeouts v0.5.0 // indirect
 	github.com/hashicorp/terraform-plugin-framework-validators v0.18.0 // indirect
 	github.com/hashicorp/terraform-plugin-go v0.28.0 // indirect
 	github.com/hashicorp/terraform-plugin-log v0.9.0 // indirect

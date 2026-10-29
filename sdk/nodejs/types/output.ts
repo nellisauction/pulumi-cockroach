@@ -73,7 +73,7 @@ export interface ClusterDedicated {
      */
     numVirtualCpus: number;
     /**
-     * Set to true to assign private IP addresses to nodes. Required for CMEK and other advanced networking features. Clusters created with this flag will have advanced security features enabled.  This cannot be changed after cluster creation and incurs additional charges.  See [Create an Advanced Cluster](https://www.cockroachlabs.com/docs/cockroachcloud/create-an-advanced-cluster.html#step-6-configure-advanced-security-features) and [Pricing](https://www.cockroachlabs.com/pricing/) for more information.
+     * Set to true to assign private IP addresses to nodes. Required for CMEK and other advanced networking features. Clusters created with this flag will have advanced security features enabled.  This cannot be changed after cluster creation and incurs additional charges.  Mission Critical clusters always use private IP addresses, so `false` is rejected. See [Create an Advanced Cluster](https://www.cockroachlabs.com/docs/cockroachcloud/create-an-advanced-cluster.html#step-6-configure-advanced-security-features) and [Pricing](https://www.cockroachlabs.com/pricing/) for more information.
      */
     privateNetworkVisibility: boolean;
     /**
@@ -86,13 +86,36 @@ export interface ClusterDedicated {
     supportsClusterVirtualization?: boolean;
 }
 
+export interface ClusterHost {
+    /**
+     * The IPv4 range in CIDR format that will be used by the cluster. This is supported only on GCP, and must have a subnet mask no larger than /19. Defaults to "172.28.0.0/14". This cannot be changed after cluster creation.
+     */
+    cidrRange: string;
+    /**
+     * Number of disk I/O operations per second that are permitted on each node in the cluster. Only configurable for AWS clusters during creation. For GCP clusters, this value is ignored and the cloud provider default is used. Omit this attribute to use the server-side default based on machine type and storage size. The provisioned value may differ from the requested value.
+     */
+    diskIops: number;
+    /**
+     * Memory per node in GiB.
+     */
+    memoryGib: number;
+    /**
+     * Number of virtual CPUs per node in the cluster. Must be at least 4. Mutually exclusive with per-region `regions[].num_virtual_cpus`. One of `numVirtualCpus` or `regions[].num_virtual_cpus` is required.
+     */
+    numVirtualCpus: number;
+    /**
+     * Storage amount per node in GiB.
+     */
+    storageGib: number;
+}
+
 export interface ClusterRegion {
     /**
      * Internal DNS name of the cluster within the cloud provider's network. Used to connect to the cluster with PrivateLink or VPC peering.
      */
     internalDns: string;
     /**
-     * Machine type identifier per node in this region, e.g., m6.xlarge, n2-standard-4. Set this (or `numVirtualCpus`) on every region to create a heterogeneous Advanced cluster. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `numVirtualCpus` on the same region. This attribute requires a feature flag to be enabled; it is recommended to use `numVirtualCpus` instead. Valid for Advanced clusters only.
+     * Machine type identifier per node in this region, e.g., m6.xlarge, n2-standard-4. Set this (or `numVirtualCpus`) on every region to create a heterogeneous Advanced cluster. Mutually exclusive with the cluster-wide `dedicated.num_virtual_cpus`/`dedicated.machine_type` and with `numVirtualCpus` on the same region. This attribute requires a feature flag to be enabled; it is recommended to use `numVirtualCpus` instead. Valid for Advanced clusters only, and not supported on host clusters.
      */
     machineType: string;
     /**
@@ -166,6 +189,17 @@ export interface ClusterServerlessUsageLimits {
      * Maximum amount of storage (in MiB) that the cluster can have at any time during the month.
      */
     storageMibLimit?: number;
+}
+
+export interface ClusterTimeouts {
+    /**
+     * Must be at least 1h. When set, it bounds the entire operation.
+     */
+    create?: string;
+    /**
+     * Must be at least 2h. When set, it bounds the entire operation.
+     */
+    update?: string;
 }
 
 export interface CmekAdditionalRegion {
@@ -248,6 +282,17 @@ export interface CmekRegionKey {
      * Elaborates on the key's status and hints at how to fix issues that may have occurred during asynchronous key operations.
      */
     userMessage: string;
+}
+
+export interface CmekTimeouts {
+    /**
+     * Must be at least 2h. When set, it bounds the entire operation.
+     */
+    create?: string;
+    /**
+     * Must be at least 2h. When set, it bounds the entire operation.
+     */
+    update?: string;
 }
 
 export interface GetBackupsBackup {
@@ -359,6 +404,29 @@ export interface GetClusterDedicated {
      * Specifies whether an Advanced cluster is started with a virtual cluster architecture.
      */
     supportsClusterVirtualization: boolean;
+}
+
+export interface GetClusterHost {
+    /**
+     * The IPv4 range in CIDR format that is in use by the cluster. It is only set on GCP clusters and is otherwise empty.
+     */
+    cidrRange: string;
+    /**
+     * Number of disk I/O operations per second that are permitted on each node in the cluster. This value reflects the actual provisioned IOPS, which may differ from the value specified during cluster creation or update. A value of zero indicates the cloud provider-specific default.
+     */
+    diskIops: number;
+    /**
+     * Memory per node in GiB.
+     */
+    memoryGib: number;
+    /**
+     * Number of virtual CPUs per node in the cluster.
+     */
+    numVirtualCpus: number;
+    /**
+     * Storage amount per node in GiB.
+     */
+    storageGib: number;
 }
 
 export interface GetClusterRegion {
