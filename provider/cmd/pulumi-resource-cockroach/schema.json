@@ -294,10 +294,8 @@
                 "nodejs": {
                     "requiredOutputs": [
                         "internalDns",
-                        "machineType",
                         "name",
                         "nodeCount",
-                        "numVirtualCpus",
                         "primary",
                         "privateEndpointDns",
                         "s3VpcEndpointId",
@@ -335,8 +333,7 @@
                 "nodejs": {
                     "requiredOutputs": [
                         "routingId",
-                        "upgradeType",
-                        "withEmptyIpAllowlist"
+                        "upgradeType"
                     ]
                 }
             }
@@ -1015,8 +1012,7 @@
                 "memoryGib",
                 "numVirtualCpus",
                 "privateNetworkVisibility",
-                "storageGib",
-                "supportsClusterVirtualization"
+                "storageGib"
             ],
             "language": {
                 "nodejs": {
@@ -1107,10 +1103,8 @@
             "type": "object",
             "required": [
                 "internalDns",
-                "machineType",
                 "name",
                 "nodeCount",
-                "numVirtualCpus",
                 "primary",
                 "privateEndpointDns",
                 "s3VpcEndpointId",
@@ -1149,9 +1143,7 @@
             "type": "object",
             "required": [
                 "routingId",
-                "spendLimit",
-                "upgradeType",
-                "withEmptyIpAllowlist"
+                "upgradeType"
             ],
             "language": {
                 "nodejs": {
@@ -1174,17 +1166,7 @@
                     "description": "Maximum amount of storage (in MiB) that the cluster can have at any time during the month.\n"
                 }
             },
-            "type": "object",
-            "required": [
-                "provisionedVirtualCpus",
-                "requestUnitLimit",
-                "storageMibLimit"
-            ],
-            "language": {
-                "nodejs": {
-                    "requiredInputs": []
-                }
-            }
+            "type": "object"
         },
         "cockroach:index/getConnectionStringConnectionParams:getConnectionStringConnectionParams": {
             "properties": {
@@ -1791,19 +1773,15 @@
                 }
             },
             "required": [
-                "accountId",
                 "backupConfig",
                 "cloudProvider",
                 "cockroachVersion",
                 "creatorId",
                 "deleteProtection",
-                "edition",
                 "fullVersion",
                 "labels",
                 "name",
                 "operationStatus",
-                "parentId",
-                "plan",
                 "regions",
                 "state",
                 "upgradeStatus"
@@ -4216,20 +4194,16 @@
                     }
                 },
                 "required": [
-                    "accountId",
                     "backupConfig",
                     "cloudProvider",
                     "cockroachVersion",
                     "creatorId",
                     "deleteProtection",
-                    "edition",
                     "fullVersion",
                     "id",
                     "labels",
                     "name",
                     "operationStatus",
-                    "parentId",
-                    "plan",
                     "regions",
                     "state",
                     "upgradeStatus"
