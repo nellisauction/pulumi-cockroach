@@ -914,17 +914,7 @@
                     "$ref": "#/types/cockroach:index/getClusterCustomerCloudAccountGcp:getClusterCustomerCloudAccountGcp"
                 }
             },
-            "type": "object",
-            "required": [
-                "aws",
-                "azure",
-                "gcp"
-            ],
-            "language": {
-                "nodejs": {
-                    "requiredInputs": []
-                }
-            }
+            "type": "object"
         },
         "cockroach:index/getClusterCustomerCloudAccountAws:getClusterCustomerCloudAccountAws": {
             "properties": {
@@ -1161,7 +1151,6 @@
                 "routingId",
                 "spendLimit",
                 "upgradeType",
-                "usageLimits",
                 "withEmptyIpAllowlist"
             ],
             "language": {
@@ -4228,16 +4217,12 @@
                 },
                 "required": [
                     "accountId",
-                    "backupConfig",
                     "cloudProvider",
                     "cockroachVersion",
                     "creatorId",
-                    "customerCloudAccount",
-                    "dedicated",
                     "deleteProtection",
                     "edition",
                     "fullVersion",
-                    "host",
                     "id",
                     "labels",
                     "name",
@@ -4245,7 +4230,6 @@
                     "parentId",
                     "plan",
                     "regions",
-                    "serverless",
                     "state",
                     "upgradeStatus"
                 ],
