@@ -77,6 +77,7 @@ export class Cmek extends pulumi.CustomResource {
      * Aggregated status of the cluster's encryption key(s).
      */
     declare public readonly status: pulumi.Output<string>;
+    declare public readonly timeouts: pulumi.Output<outputs.CmekTimeouts | undefined>;
 
     /**
      * Create a Cmek resource with the given unique name, arguments, and options.
@@ -95,6 +96,7 @@ export class Cmek extends pulumi.CustomResource {
             resourceInputs["cmekId"] = state?.cmekId;
             resourceInputs["regions"] = state?.regions;
             resourceInputs["status"] = state?.status;
+            resourceInputs["timeouts"] = state?.timeouts;
         } else {
             const args = argsOrState as CmekArgs | undefined;
             if (args?.cmekId === undefined && !opts.urn) {
@@ -107,6 +109,7 @@ export class Cmek extends pulumi.CustomResource {
             resourceInputs["cmekId"] = args?.cmekId;
             resourceInputs["regions"] = args?.regions;
             resourceInputs["status"] = args?.status;
+            resourceInputs["timeouts"] = args?.timeouts;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Cmek.__pulumiType, name, resourceInputs, opts);
@@ -130,6 +133,7 @@ export interface CmekState {
      * Aggregated status of the cluster's encryption key(s).
      */
     status?: pulumi.Input<string | undefined>;
+    timeouts?: pulumi.Input<inputs.CmekTimeouts | undefined>;
 }
 
 /**
@@ -149,4 +153,5 @@ export interface CmekArgs {
      * Aggregated status of the cluster's encryption key(s).
      */
     status?: pulumi.Input<string | undefined>;
+    timeouts?: pulumi.Input<inputs.CmekTimeouts | undefined>;
 }
